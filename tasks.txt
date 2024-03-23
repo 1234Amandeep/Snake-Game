@@ -1,0 +1,1 @@
+1. Draw board sketch on canvas.

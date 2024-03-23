@@ -1,0 +1,14 @@
+Key:
+  1. [feature] Player maneuvers the snake.
+  2. [rule] Player must keep the snake from colliding with itself and the boundries.
+  3. [rule] Snake gets longer with each piece of food eaten often called the eggs.
+  4. [end game / goal] Goal is to eat more and more eggs basically to get high score.
+  5. [rule] Each time "eaten" by the head of the snake causes he snake to get longer.
+  6. [rule] Stating postion of the Snake is fixed.
+  7. [rule] The head of the snake continually moves forward, unable to stop, and eventually after     consuming eggs it ever grows longer.
+  8. [feature] Player can move the snake up, down, right, and left to avoid hitting walls and itself.
+  9. [feature] Player's Snake is of a certain length, so the tail also moves.
+  10. [feature] The snake moves in a grid, either square or rectangular, one block at a time.
+  11. [feature] Food items appear at random positions on the grid for the snake to eat.
+  12. [feature] Players can start a new game immediately after the current game ends, allowing for quick retries.
+  13. [feature] Player can pause and then resume the game at any time. 
