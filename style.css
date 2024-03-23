@@ -1,6 +1,6 @@
 #canvas {
   position: absolute;
-  background: #000;
+  background: hsl(360, 50%, 80%);
   top: 0;
   left: 0;
   width: 100%;
