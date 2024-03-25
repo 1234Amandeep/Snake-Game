@@ -4,113 +4,64 @@ const ctx = canvas.getContext("2d");
 canvas.width = window.innerWidth;
 canvas.height = window.innerHeight;
 
-const boardSize = 300;
-const startPoint = {
-  x: (canvas.width - boardSize) / 2,
-  y: (canvas.height - boardSize) / 2,
-};
-
-window.addEventListener("resize", () => {
-  canvas.width = window.innerWidth;
-  canvas.height = window.innerHeight;
-  startPoint.x = (canvas.width - boardSize) / 2;
-  startPoint.y = (canvas.height - boardSize) / 2;
-  squares = [];
-  drawBoard();
-  init();
-});
-
 // 🔥🔥🔥 write code from here...
-let squares = [];
+// 🌏🌏🌏 Global Declarations
+const size = 30;
+const board = [];
+const lengthOfBoard = 100;
+const lengthOfSnake = 4;
+const snake = [];
+const foodPos = {
+  x: 6,
+  y: 5,
+};
 
-// 🎶 square blueprint
-class Square {
-  constructor(displacementX, displacementY) {
-    this.x = startPoint.x + displacementX;
-    this.y = startPoint.y + displacementY;
-    this.width = 30;
-    this.height = 30;
-    this.fillColor = "black";
-    this.strokeColor = "white";
-  }
+// draw cell
+const drawCell = (col, row, fill = "black", stroke = "white") => {
+  const x = col * size;
+  const y = row * size;
 
-  draw() {
-    ctx.fillStyle = "black";
-    ctx.strokeStyle = "white";
-    ctx.lineWidth = 2;
-    ctx.beginPath();
-    ctx.moveTo(this.x, this.y);
-    ctx.lineTo(this.x + this.width, this.y);
-    ctx.lineTo(this.x + this.width, this.y + this.height);
-    ctx.lineTo(this.x, this.y + this.height);
-    ctx.lineTo(this.x, this.y);
-    ctx.stroke();
-    ctx.fill();
-  }
-}
+  ctx.fillStyle = fill;
+  ctx.fillRect(x, y, size, size);
+  ctx.strokeStyle = stroke;
+  ctx.strokeRect(x, y, size, size);
+};
 
-// initial setup
+// move snake
+const moveSnake = (direction) => {};
+
 // draw board
-const drawBoard = () => {
-  // making 100 square objects of diff origins
-  let x = 0;
-  let y = 0;
-  for (let i = 0; i < 100; i++) {
-    squares.push(new Square(x, y));
-    x += 30;
-    if (x == 300) {
-      x = 0;
-      y += 30;
-    }
+const drawBoard = (length) => {
+  for (let i = 0; i < length; i++) {
+    board.push({ x: i % 10, y: parseInt(i / 10) });
   }
-  // drawing whole board
-  for (let j = 0; j < squares.length; j++) {
-    squares[j].draw();
+
+  for (let i = 0; i < board.length; i++) {
+    drawCell(board[i].x, board[i].y);
   }
 };
+drawBoard(lengthOfBoard);
 
-drawBoard();
-
-// drawing snake
+// draw Snake
 const drawSnake = () => {
-  const rangeEnd = squares.length - 1;
-  const rangeStart = 0;
-  const randomPosition = 0;
+  for (let i = lengthOfSnake - 1; i >= 0; i--) {
+    snake.push({ x: i, y: 0 });
+  }
 
-  for (let i = randomPosition; i < 3; i++) {
-    ctx.fillStyle = "white";
-    ctx.fillRect(
-      startPoint.x + i * squares[0].width,
-      startPoint.y + 0 * squares[0].height,
-      squares[0].width,
-      squares[0].height
-    );
+  for (let i = 0; i < snake.length; i++) {
+    drawCell(snake[i].x, snake[i].y, "lime", "black");
   }
 };
+drawSnake();
 
-// drawing snake food
-const drawSnakeFood = () => {
-  const rangeEnd = squares.length - 1;
-  const rangeStart = 0;
-  const randomPosition = 5;
+// draw food
+const drawFood = () => {
+  const x = foodPos.x * size + size / 2;
+  const y = foodPos.y * size + size / 2;
 
   ctx.beginPath();
-  ctx.fillStyle = "yellow";
-  console.log("hey");
-  ctx.arc(
-    startPoint.x + 15 + randomPosition * 30,
-    startPoint.y + 15,
-    7,
-    0,
-    2 * Math.PI
-  );
+  ctx.fillStyle = "purple";
+  ctx.arc(x, y, size / 2 - 5, 0, 2 * Math.PI);
   ctx.fill();
 };
-
-// game initial state
-const init = () => {
-  drawSnake();
-  drawSnakeFood();
-};
-
-init();
+drawFood();
