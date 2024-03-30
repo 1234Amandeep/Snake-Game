@@ -9,8 +9,8 @@ canvas.height = window.innerHeight;
 const size = 30;
 const board = [];
 const lengthOfBoard = 100;
-const lengthOfSnake = 4;
-const snake = [];
+let lengthOfSnake = 4;
+let snake = [];
 let direction = "right";
 let score = 0;
 const foodPos = {
@@ -19,8 +19,10 @@ const foodPos = {
 };
 
 const initSnake = () => {
+  console.log("init");
+  snake = [];
   for (let i = lengthOfSnake - 1; i >= 0; i--) {
-    snake.push({ x: i + 2, y: 3 });
+    snake.push({ x: i, y: 0 });
   }
 };
 initSnake();
@@ -43,12 +45,39 @@ const moveSnake = () => {
 
   if (direction == "right") {
     HeadX++;
+    console.log(HeadX + 1, HeadY + 1, lengthOfSnake, snake);
+    if (HeadX % 10 == 0) {
+      HeadX = 3;
+      restart();
+      return;
+    }
   } else if (direction == "left") {
     HeadX--;
+    console.log(HeadX + 1, HeadY + 1, lengthOfSnake, snake);
+    console.log(HeadX);
+    if (HeadX < 0) {
+      HeadX = 3;
+      console.log(HeadX + 1, HeadY + 1, lengthOfSnake, snake);
+      console.log(HeadX);
+      restart();
+      return;
+    }
   } else if (direction == "up") {
     HeadY--;
+    console.log(HeadX + 1, HeadY + 1, lengthOfSnake, snake);
+    if (HeadY < 0) {
+      HeadY = 0;
+      restart();
+      return;
+    }
   } else {
     HeadY++;
+    console.log(HeadX + 1, HeadY + 1, lengthOfSnake, snake);
+    if (HeadY > 9) {
+      HeadY = 0;
+      restart();
+      return;
+    }
   }
   let tail = snake.pop();
   let tailX = tail.x;
@@ -57,10 +86,11 @@ const moveSnake = () => {
   tail.x = HeadX;
   tail.y = HeadY;
   if (tail.x == foodPos.x && tail.y == foodPos.y) {
-    snake.push({ tailX, tailY });
+    snake.push({ x: tailX, y: tailY });
     foodPos.x = parseInt(Math.random() * 9 + 0);
     foodPos.y = parseInt(Math.random() * 9 + 0);
     score++;
+    lengthOfSnake++;
     console.log(score);
   }
   snake.unshift(tail);
@@ -125,11 +155,21 @@ const drawSnake = () => {
 };
 drawSnake();
 
+// restart
+const restart = () => {
+  score = 0;
+  console.log(snake);
+  lengthOfSnake = 4;
+  initSnake();
+  console.log(snake);
+  return;
+};
+
 // 📽️📽️📽️ animation
-// const animation = () => {
-//   drawSnake();
-//   window.requestAnimationFrame(animation);
-// };
+const animation = () => {
+  drawSnake();
+  window.requestAnimationFrame(animation);
+};
 
 let interval;
 document.addEventListener("keydown", (e) => {
@@ -146,6 +186,6 @@ document.addEventListener("keydown", (e) => {
   }
   console.log("hey", direction);
   // Game loop
-  interval = setInterval(drawSnake, 400);
+  interval = setInterval(drawSnake, 200);
   // window.requestAnimationFrame(drawSnake);
 });
