@@ -190,10 +190,10 @@ const restart = () => {
 };
 
 // 📽️📽️📽️ animation
-const animation = () => {
-  drawSnake();
-  window.requestAnimationFrame(animation);
-};
+// const animation = () => {
+//   drawSnake();
+//   window.requestAnimationFrame(animation);
+// };
 
 let interval;
 document.addEventListener("keydown", (e) => {
