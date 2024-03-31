@@ -17,9 +17,9 @@ const foodPos = {
   x: parseInt(Math.random() * 9 + 0),
   y: parseInt(Math.random() * 9 + 0),
 };
+let isStarted = false;
 
 const initSnake = () => {
-  console.log("init");
   snake = [];
   for (let i = lengthOfSnake - 1; i >= 0; i--) {
     snake.push({ x: i, y: 0 });
@@ -45,38 +45,60 @@ const moveSnake = () => {
 
   if (direction == "right") {
     HeadX++;
-    console.log(HeadX + 1, HeadY + 1, lengthOfSnake, snake);
+    //colided with the wall
     if (HeadX % 10 == 0) {
-      HeadX = 3;
       restart();
       return;
+    }
+    // collided with itself
+    for (let i = 1; i < snake.length; i++) {
+      if (snake[i].x == HeadX && snake[i].y == HeadY) {
+        restart();
+        return;
+      }
     }
   } else if (direction == "left") {
     HeadX--;
-    console.log(HeadX + 1, HeadY + 1, lengthOfSnake, snake);
-    console.log(HeadX);
+
     if (HeadX < 0) {
-      HeadX = 3;
-      console.log(HeadX + 1, HeadY + 1, lengthOfSnake, snake);
-      console.log(HeadX);
+      // HeadX = 3;
       restart();
       return;
     }
+    // collided with itself
+    for (let i = 1; i < snake.length; i++) {
+      if (snake[i].x == HeadX && snake[i].y == HeadY) {
+        restart();
+        return;
+      }
+    }
   } else if (direction == "up") {
     HeadY--;
-    console.log(HeadX + 1, HeadY + 1, lengthOfSnake, snake);
     if (HeadY < 0) {
       HeadY = 0;
       restart();
       return;
     }
+    // collided with itself
+    for (let i = 1; i < snake.length; i++) {
+      if (snake[i].x == HeadX && snake[i].y == HeadY) {
+        restart();
+        return;
+      }
+    }
   } else {
     HeadY++;
-    console.log(HeadX + 1, HeadY + 1, lengthOfSnake, snake);
     if (HeadY > 9) {
-      HeadY = 0;
+      // HeadY = 0;
       restart();
       return;
+    }
+    // collided with itself
+    for (let i = 1; i < snake.length; i++) {
+      if (snake[i].x == HeadX && snake[i].y == HeadY) {
+        restart();
+        return;
+      }
     }
   }
   let tail = snake.pop();
@@ -91,7 +113,6 @@ const moveSnake = () => {
     foodPos.y = parseInt(Math.random() * 9 + 0);
     score++;
     lengthOfSnake++;
-    console.log(score);
   }
   snake.unshift(tail);
 };
@@ -151,17 +172,20 @@ const drawSnake = () => {
   for (let i = 0; i < snake.length; i++) {
     drawCell(snake[i].x, snake[i].y, "lime", "black");
   }
-  moveSnake();
+  if (isStarted) {
+    moveSnake();
+  }
 };
 drawSnake();
 
 // restart
 const restart = () => {
   score = 0;
-  console.log(snake);
   lengthOfSnake = 4;
   initSnake();
-  console.log(snake);
+  isStarted = false;
+  direction = "right";
+  drawSnake();
   return;
 };
 
@@ -175,17 +199,24 @@ let interval;
 document.addEventListener("keydown", (e) => {
   clearInterval(interval);
   const key = e.which;
-  if (key == 39 && direction != "left") {
-    direction = "right";
-  } else if (key == 40 && direction != "up") {
-    direction = "down";
-  } else if (key == 38 && direction != "down") {
-    direction = "up";
-  } else if (key == 37 && direction != "right") {
-    direction = "left";
+
+  // if user presses enter game starts
+  if (key == 13) {
+    isStarted = true;
   }
-  console.log("hey", direction);
-  // Game loop
-  interval = setInterval(drawSnake, 200);
-  // window.requestAnimationFrame(drawSnake);
+  // if game has started listen for direction and spin up gameloop
+  if (isStarted) {
+    if (key == 39 && direction != "left") {
+      direction = "right";
+    } else if (key == 40 && direction != "up") {
+      direction = "down";
+    } else if (key == 38 && direction != "down") {
+      direction = "up";
+    } else if (key == 37 && direction != "right") {
+      direction = "left";
+    }
+    // Game loop
+    interval = setInterval(drawSnake, 400);
+    // window.requestAnimationFrame(drawSnake);
+  }
 });
